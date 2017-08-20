@@ -16,7 +16,7 @@ public class Menu : MonoBehaviour
     public int minDecks = 1;
     public int maxDecks = 8;
     public int playingDecks = 3;
-    public Enums.RestartMode defaultResetMode = Enums.RestartMode.fifCard;
+    public Enums.RestartMode resetMode = Enums.RestartMode.fifCard;
 
     public void IncreaseDeck()
     {
@@ -38,7 +38,7 @@ public class Menu : MonoBehaviour
     public void Play()
     {
         PlayerPrefs.SetInt("deckCounts", playingDecks + 1);
-        PlayerPrefs.SetInt("restartMode", (int)defaultResetMode);
+        PlayerPrefs.SetInt("restartMode", (int)resetMode);
 
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
@@ -60,7 +60,23 @@ public class Menu : MonoBehaviour
             fifToggle.isOn = true;
             oneToggle.interactable = false;
             halfToggle.interactable = false;
+            setFif();
         }
+    }
+
+    public void setFif()
+    {
+        resetMode = Enums.RestartMode.fifCard;
+    }
+
+    public void setOneDeck()
+    {
+        resetMode = Enums.RestartMode.oneDeck;
+    }
+
+    public void setHalfDeck()
+    {
+        resetMode = Enums.RestartMode.halfCountDeck;
     }
 
     // Use this for initialization

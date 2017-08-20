@@ -99,11 +99,6 @@ public class GameManager : MonoBehaviour {
     public void DealCard(bool isUpdate = true)
     {
         StartCoroutine(SendIngCard(isUpdate));
-
-        //if (playerCards.Count >= 5)
-        //{
-        //    Pass();
-        //}
     }
 
     public void Pass()
@@ -204,6 +199,7 @@ public class GameManager : MonoBehaviour {
         okayButton.gameObject.SetActive(false);
         continueButton.gameObject.SetActive(true);
         exitButton.gameObject.SetActive(true);
+        continueButton.interactable = chips >= betAdd ? true : false;
     }
 
     private void CollectDeck(List<GameObject> deck, List<GameObject> targetDeck)
@@ -324,39 +320,58 @@ public class GameManager : MonoBehaviour {
                 else
                 {
                     bool isHit = false;
-                    if (computerPoint < playerPoint)
+                    bool isHasAce = false;
+                    int tempPoint = 0;
+                    List<List<int>> tempCards = computerCards.Select(x => x.GetComponent<Card>().point).ToList();
+                    for (int i = 0; i < tempCards.Count; i++)
                     {
-                        int runningCount = GetRunningCount();
-                        float trueCount = runningCount / (gameDeck.Count / (float)deckCounts);
-                        float randRate = Random.Range(0, Mathf.Abs(trueCount));
-                        Debug.Log(runningCount + "," + trueCount+","+ randRate);
-                        if (trueCount < 0)
+                        tempPoint += tempCards[i][0];
+                        if (tempCards[i].Count >1)
                         {
-                            if (randRate < Mathf.Abs(trueCount) * 0.5f)
+                            isHasAce = true;
+                        }
+                    }
+                    if (isHasAce)
+                    {
+                        isHit = (tempPoint != computerPoint);
+                    }
+                    if (!isHit)
+                    {
+                        if (computerPoint < playerPoint)
+                        {
+                            int runningCount = GetRunningCount();
+                            float trueCount = runningCount / (gameDeck.Count / (float)deckCounts);
+                            float randRate = Random.Range(0, Mathf.Abs(trueCount));
+                            Debug.Log(runningCount + "," + trueCount + "," + randRate);
+                            if (trueCount < 0)
                             {
-                                isHit = true;
+                                if (randRate < Mathf.Abs(trueCount) * 0.5f)
+                                {
+                                    isHit = true;
+                                }
                             }
+                            else
+                            {
+                                if (randRate < trueCount * 0.2f)
+                                {
+                                    isHit = true;
+                                }
+                            }
+                            //win
+                            totalRate = 2;
+                        }
+                        else if (computerPoint > playerPoint)
+                        {
+                            //loss
+                            totalRate = 0;
                         }
                         else
                         {
-                            if (randRate < trueCount * 0.2f)
-                            {
-                                isHit = true;
-                            }
+                            //drew
+                            totalRate = 1;
                         }
-                        //win
-                        totalRate = 2;
                     }
-                    else if(computerPoint > playerPoint)
-                    {
-                        //loss
-                        totalRate = 0;
-                    }
-                    else
-                    {
-                        //drew
-                        totalRate = 1;
-                    }
+
                     if (isHit)
                     {
                         DealCard();
@@ -572,6 +587,8 @@ public class GameManager : MonoBehaviour {
     {
         deckCounts = PlayerPrefs.GetInt("deckCounts");
         restartMode = (Enums.RestartMode)PlayerPrefs.GetInt("restartMode");
+
+        Debug.Log(deckCounts + "," + restartMode);
 
         totalImage.gameObject.SetActive(false);
 

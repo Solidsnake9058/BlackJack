@@ -31,7 +31,6 @@ public class Card : MonoBehaviour
             {
                 case 1:
                     points.Add(1);
-                    points.Add(10);
                     points.Add(11);
                     break;
                 case 10:

@@ -300,7 +300,7 @@ public class GameManager : MonoBehaviour {
                 }
                 else
                 {
-                    //drew
+                    //draw
                     totalRate = 1;
                 }
                 isEnd = true;
@@ -333,7 +333,7 @@ public class GameManager : MonoBehaviour {
                     }
                     if (isHasAce)
                     {
-                        isHit = (tempPoint != computerPoint);
+                        isHit = (tempPoint != computerPoint); 
                     }
                     if (!isHit)
                     {
@@ -367,7 +367,7 @@ public class GameManager : MonoBehaviour {
                         }
                         else
                         {
-                            //drew
+                            //draw
                             totalRate = 1;
                         }
                     }
@@ -390,7 +390,7 @@ public class GameManager : MonoBehaviour {
                     resultText.color = Color.red;
                     break;
                 case 1:
-                    resultText.text = "Drew!";
+                    resultText.text = "Draw!";
                     resultText.color = Color.blue;
                     break;
                 default:
